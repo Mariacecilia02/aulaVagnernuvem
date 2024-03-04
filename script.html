@@ -9,21 +9,50 @@
 
 <h1>Consulta de CEP</h1>
 
-<input name="pesquisaCep" id="pesquisaCep" type="number"/>
-<input type="button" name="Pesquisar" value="Buscar no Via CEP" onclick="buscarEnderecoNoViaCEP()"/>
+<label for="pesquisaCep">Digite o CEP:</label>
+<input name="pesquisaCep" id="pesquisaCep" type="number" placeholder="Digite">
+<input type="button" name="Pesquisar" onclick="buscarEnderecoNoViaCEP()" value="Pesquisar">
 
+
+<br>
+<label for="complemento">Complemento:</label>
+<input type="text" id="complemento" >
+<br>
+<label for="bairro">Bairro:</label>
+<input type="text" id="bairro" >
+<br>
+<label for="localidade">Localidade:</label>
+<input type="text" id="localidade" >
+<br>
+<label for="uf">UF(Unidade Federativa):</label>
+<input type="text" id="uf" >
 
 </body>
 </html>
 
 <script>
-    function buscarEnderecoNoViaCEP(){
-         componentepesquisaCep =  document.getElementById("pesquisaCep");
-            alert("O cep digitado é:" + componentepesquisaCep.value);
-            alert("funcionou o clik no botão buscar");
-    }
+  function buscarEnderecoNoViaCEP() {
+    var componentePesquisaCep = document.getElementById("pesquisaCep");
+    alert("O CEP digitado é: " + componentePesquisaCep.value);
 
+    const cep = componentePesquisaCep.value;
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
 
+   fetch(url)
+      .then(response => response.json())
+      .then(data => preencherCampos(data))
+      .catch(error => {
+        console.error('Erro na consulta:', error);
+        alert('Erro na consulta. Verifique o CEP e tente novamente.');
+      });
+  }
 
-
+  function preencherCampos(conteudo) {
+    document.getElementById('complemento').value = conteudo.complemento || '';
+    document.getElementById('bairro').value = conteudo.bairro || '';
+    document.getElementById('localidade').value = conteudo.localidade || '';
+    document.getElementById('uf').value = conteudo.uf || '';
+  }
 </script>
+</body>
+</html>
